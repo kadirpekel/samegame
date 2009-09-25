@@ -16,7 +16,7 @@
  ------------------------------------------------------------------------------
 */
 public class SameGame extends java.applet.Applet {
-	static final int ROW_CNT = 20, COL_CNT = 20, CELL_SIZE = 20;
+	static final int ROW_CNT = 15, COL_CNT = 15, CELL_SIZE = 30;
 	static final int[] CELL_TABLE = {0xFFDB5800, 0xFF4FA6B2, 0xFFF0C600, 0xFF8EA106};
 	int[][] table = new int[ROW_CNT][COL_CNT];
 	java.util.Random random = new java.util.Random();
@@ -36,21 +36,17 @@ public class SameGame extends java.applet.Applet {
 			offscreenG.setColor(new java.awt.Color(table[r][c]));
 			offscreenG.fillOval((c * CELL_SIZE), (((ROW_CNT - 1) * CELL_SIZE) - (r * CELL_SIZE)), CELL_SIZE, CELL_SIZE);
 		}
-		g.drawImage(offscreen, 0, 0, this);
-		offscreenG.dispose();
-		detectGameOver();
-	}
-	void detectGameOver() {
 		boolean gameOver = true;
 		int score = 0;
 		for (int r = ROW_CNT - 1; r >= 0; r--) for (int c = 0; c < table[r].length; c++) {
 			gameOver = gameOver && !hasNeighbour(r, c);
 			score += table[r][c] == 0 ? 0 : 1;
 		}
-		if(gameOver) {
-			javax.swing.JOptionPane.showMessageDialog(this,score == 0 ? "You Win!" : "You Lose! Your Score:" + score);
-			init();
-		}
+		offscreenG.setColor(new java.awt.Color(0xFFFFFFFF));
+		offscreenG.setFont(new java.awt.Font("Verdana", java.awt.Font.PLAIN, 12));
+		if(gameOver) offscreenG.drawString(score == 0 ? "You Win!" : "You Lose! Your Score:" + score, 20, 20);
+		g.drawImage(offscreen, 0, 0, this);
+		offscreenG.dispose();
 	}
 	public boolean mouseDown(java.awt.Event evt, int x, int y) {
 		int column = x / CELL_SIZE;
