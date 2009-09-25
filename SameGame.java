@@ -15,25 +15,29 @@
  limitations under the License.
  ------------------------------------------------------------------------------
 */
-
 public class SameGame extends java.applet.Applet {
-	
 	static final int ROW_CNT = 20, COL_CNT = 20, CELL_SIZE = 20;
-	static final int[] CELL_TABLE = {0xffff0000, 0xffffff00, 0xff00ff00, 0xff00ffff, 0xff0000ff};
+	static final int[] CELL_TABLE = {0xFFDB5800, 0xFF4FA6B2, 0xFFF0C600, 0xFF8EA106};
 	int[][] table = new int[ROW_CNT][COL_CNT];
 	java.util.Random random = new java.util.Random();
-	
+	java.awt.Image offscreen;
 	public void init() {
 		setSize(COL_CNT * CELL_SIZE, ROW_CNT * CELL_SIZE);
-		setBackground(new java.awt.Color(0));
+		offscreen = createImage(getWidth(), getHeight());
 		for (int r = ROW_CNT - 1; r >= 0; r--) for (int c = 0; c < table[r].length; c++)
 			table[r][c] = CELL_TABLE[random.nextInt(CELL_TABLE.length)];
 	}
+	public void update(java.awt.Graphics g) { paint(g); }
 	public void paint(java.awt.Graphics g) {
+		java.awt.Graphics2D offscreenG = (java.awt.Graphics2D)offscreen.getGraphics();
+		offscreenG.addRenderingHints(new java.awt.RenderingHints(java.awt.RenderingHints.KEY_ANTIALIASING, java.awt.RenderingHints.VALUE_ANTIALIAS_ON));
+		offscreenG.fillRect(0, 0, getWidth(), getHeight());
 		for (int r = 0; r < table.length; r++) for (int c = 0; c < table[r].length; c++) {
-				g.setColor(new java.awt.Color(table[r][c]));
-				g.fillRect((c * CELL_SIZE) + 1, (((ROW_CNT - 1) * CELL_SIZE) - (r * CELL_SIZE)) + 1, CELL_SIZE - 1, CELL_SIZE - 1);
+			offscreenG.setColor(new java.awt.Color(table[r][c]));
+			offscreenG.fillOval((c * CELL_SIZE), (((ROW_CNT - 1) * CELL_SIZE) - (r * CELL_SIZE)), CELL_SIZE, CELL_SIZE);
 		}
+		g.drawImage(offscreen, 0, 0, this);
+		offscreenG.dispose();
 		detectGameOver();
 	}
 	void detectGameOver() {
@@ -43,7 +47,10 @@ public class SameGame extends java.applet.Applet {
 			gameOver = gameOver && !hasNeighbour(r, c);
 			score += table[r][c] == 0 ? 0 : 1;
 		}
-		if(gameOver) System.out.println(score == 0 ? "You Win!" : "You Lose! Your Soint:" + score);
+		if(gameOver) {
+			javax.swing.JOptionPane.showMessageDialog(this,score == 0 ? "You Win!" : "You Lose! Your Score:" + score);
+			init();
+		}
 	}
 	public boolean mouseDown(java.awt.Event evt, int x, int y) {
 		int column = x / CELL_SIZE;
