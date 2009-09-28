@@ -16,7 +16,7 @@
  ------------------------------------------------------------------------------
 */
 public class SameGame extends java.applet.Applet {
-	static final int ROW_CNT = 15, COL_CNT = 15, CELL_SIZE = 30;
+	static final int ROW_CNT = 20, COL_CNT = 20, CELL_SIZE = 20;
 	static final int[] CELL_TABLE = {0xFFDB5800, 0xFF4FA6B2, 0xFFF0C600, 0xFF8EA106};
 	int[][] table = new int[ROW_CNT][COL_CNT];
 	java.util.Random random = new java.util.Random();
@@ -51,11 +51,10 @@ public class SameGame extends java.applet.Applet {
 	public boolean mouseDown(java.awt.Event evt, int x, int y) {
 		int column = x / CELL_SIZE;
 		int row = (ROW_CNT - 1) - (y / CELL_SIZE);
-		System.out.println("row:" + row + " col:" + column + " cell:" + Integer.toHexString(table[row][column]));
 		if (hasNeighbour(row, column)) {
 			traverseCells(row, column, table[row][column]);
 			mergeRows(0, 0);
-			mergeColumns(0, 0);
+			mergeColumns(true, 0, 0);
 		}
 		repaint();
 		return true;
@@ -98,19 +97,20 @@ public class SameGame extends java.applet.Applet {
 		if (column + 1 < COL_CNT && cell == table[row][column + 1]) return true;
 		return false;
 	}
-	void mergeColumns(int row, int column) {
+	void mergeColumns(boolean colEmpty, int row, int column) {
 		if(column < COL_CNT) {
-			boolean columnEmpty = true;
-			for(int r = 0; r < ROW_CNT; r++) columnEmpty = columnEmpty && table[r][column] == 0; 
-			if(columnEmpty) {
-				for(int r = 0; r < ROW_CNT; r++) {
-					if((column + 1) < COL_CNT) {
-						table[r][column] = table[r][column + 1]; 
-						table[r][column + 1] = 0;
-					}
+			if(row < ROW_CNT) {
+				mergeColumns(colEmpty && table[row][column] == 0, ++row, column);
+			} else {
+				if(colEmpty) {
+					for(int c = column; c < COL_CNT; c++) for (int r = ROW_CNT - 1; r >= 0; r--)
+						if(c + 1 < COL_CNT) {
+							table[r][c] = table[r][c + 1];
+							table[r][c + 1] = 0;
+						}
 				}
+				mergeColumns(true, 0, ++column);
 			}
-			mergeColumns(0, ++column);
 		}
 	}
 }
