@@ -103,13 +103,19 @@ public class SameGame extends java.applet.Applet {
 				mergeColumns(colEmpty && table[row][column] == 0, ++row, column);
 			} else {
 				if(colEmpty) {
-					for(int c = column; c < COL_CNT; c++) for (int r = ROW_CNT - 1; r >= 0; r--)
-						if(c + 1 < COL_CNT) {
-							table[r][c] = table[r][c + 1];
-							table[r][c + 1] = 0;
-						}
+					boolean colIdle = true;
+					for(int c = column; c < COL_CNT; c++) colIdle = colIdle && table[0][c] == 0;
+					if(!colIdle) {
+						for(int c = column; c < COL_CNT; c++) for (int r = ROW_CNT - 1; r >= 0; r--)
+							if(c + 1 < COL_CNT) {
+								table[r][c] = table[r][c + 1];
+								table[r][c + 1] = 0;
+							}
+						mergeColumns(true, 0, column);
+					}
+				} else {
+					mergeColumns(true, 0, ++column);
 				}
-				mergeColumns(true, 0, ++column);
 			}
 		}
 	}
