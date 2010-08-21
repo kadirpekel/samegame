@@ -1,10 +1,99 @@
+<!doctype html>
 <html>
-	<head>
-		<title>SameGame</title>
-	</head>
+<head>
+<title>JS1k, 1k demo submission</title>
+<meta charset="utf-8" />
+</head>
 <body>
-	<applet code="SameGame.class" archive="SameGame.class?v=200909291055" width="400" height="400">
-		Java runtime browser plugin required.
-	</applet>
+<canvas id="c"></canvas>
+<script>
+c = document.getElementById('c');
+s = 15;
+r = 25;
+l = s * r;
+c.width = c.height = l;
+b = [];
+fl = Math.floor;
+m = ['tomato', 'orange', 'olive', 'steelblue'];
+document.body.style.margin = 0;
+p = function (i) {
+	return b[i] != '#000'
+		&& ((b[i - s] == b[i]) 
+			|| (b[i + s] == b[i])
+			|| (((i-1)%s != s-1) && (b[i - 1] == b[i]))
+			|| (((i+1)%s != 0) && (b[i + 1] == b[i])));
+};
+up = c.onclick = function (e) {
+    var q = true,
+        sc = s * s,
+        w = [];
+    if (e) {
+        var k = fl(e.clientX / r) + fl(e.clientY / r) * s;
+        if (!p(k)) return;
+        var h = b[k];
+        function el(i) {
+            if (b[i] && b[i] == h) {
+                b[i] = '#000';
+                el(i - s);
+                el(i + s);
+				if((i-1)%s != s-1) el(i - 1);
+				if((i+1)%s != 0) el(i + 1);
+            }
+        }
+        el(k);
+        for (var i = (s * s) - 1; i >= 0; i--) {
+            if (b[i] == '#000') {
+				var ii = i;
+                while (b[ii-=s] == '#000');
+                if (b[ii]) {
+                    b[i] = b[ii];
+                    b[ii] = '#000';
+                } else {
+					if (!b[i+s]) w.push(i % s);
+				}
+            }
+        }
+	    for (var i in w) {
+	        var z = w[i];
+	        while (z < s) {
+	            for (var j = 0; j < s; j++) {
+					var u = (j * s) + z;
+					if((u+1)%s != 0) {
+						b[u] = b[u + 1];
+						b[u + 1] = '#000';	
+					}
+					
+	            }
+	            z++;
+	        }
+	    }
+    }
+	with(c.getContext('2d')) {
+		fillStyle = '#000';
+	    fillRect(0, 0, l, l);
+	    for (var i = 0; i < s * s; i++) {
+	        fillStyle = b[i];
+	        beginPath();
+	        arc(((i % s) * r) + (r / 2), (fl(i / s) * r) + (r / 2), r / 2, 0, Math.PI * 2, true);
+	        closePath();
+	        fill();
+	    }
+	}
+    for (var i = 0; i < s * s; i++) {
+		if(b[i] == '#000') sc--;
+    	q = q && !p(i);
+	}
+    if (q) {
+        alert('Sc: ' + sc);
+        rs();
+    }
+};
+rs = function () {
+    for (var i = 0; i < s * s; i++)
+    b[i] = m[fl(Math.random() * m.length)];
+    up();
+};
+rs();
+</script>
 </body>
 </html>
