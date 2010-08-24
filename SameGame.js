@@ -7,9 +7,6 @@ var d = document,
 	current,
 	col = size = 21,
 	fl = Math.floor,
-	evaldir = function(o) {
-		return function() {board[o.i() % col == 0 ? -1 : o.i() - 1] };
-	},
 	reset = function () {
 		for (var i = 0; i < row * col; i++) {
 			board[i] = {
@@ -17,7 +14,9 @@ var d = document,
 					return board.indexOf(this)
 				},
 				c: colors[fl(Math.random() * colors.length)],
-				0: evaldir(this),
+				0: function () { // left node
+					return board[this.i() % col == 0 ? -1 : this.i() - 1]
+				},
 				
 				1: function () { // right node
 					return board[this.i() % col == col - 1 ? -1 : this.i() + 1]
