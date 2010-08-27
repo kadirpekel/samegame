@@ -1,4 +1,4 @@
-/*var canvas = document.getElementById('c'),
+var canvas = document.getElementById('c'),
 	g = canvas.getContext('2d'),
 	colors = ['#59031A', '#5BA68A', '#D9C45B', '#D95829', '#D90404'],
 	board = [],
@@ -85,5 +85,4 @@ document.body.style.margin = 0;
 canvas.onclick = canvas.onmousemove = update;
 canvas.width = size * col;
 canvas.height = size * row;
-reset();*/
-a="Ud=docum@.gEm@ById(\"c\"f=gContex\"2d\"h=[\"#59031A~5BA68AC45B58290404\"],i=[],j=G=21,k,l=Ma.floor;Jmec,b;Ha_(zi.indexOfP))>=0L0Z==0?:b1Z==j?:b+12Z-j3Z+j]}rurn c}JneLHoP)La=e;FcNc<4;c&zmcWb_b.a!=e_b.z=b_n(b,e)}JoPLFeNe<4;e&c=meWHc_c.z=b)rurn  Jp(LFaNa<;a&)Ka{b:h[l(Ma.random()*h.ng)]};q()} JqPLHaVlP.@X/G)+lP.@Y/G);H]!=kLn(k,falseWn(],Wk=]}HpV=\"ck\"LF7_.a)Fzc;b>NKbKb-=j]WcNc<j;c&Lz10+c;FgN!Kb]_b&<j;WHg>0)zb;b<j-g;b&)`PNa<;a&LVa+b;nullgNz;7Lzb_!o(Wg&}QSlV\"#000\";QRec0,0,G,G*W7a=LQSlVb;QRecc*G+T2l(c/j)* G+T2G-T1G-T1))}HbLar\"ft: \"Wp()docum@.body.s.marginNonck=onmousemovVq;wid=G;height=G*;p(W";for(b in c="~D9`(ty]=11];-1LUP,tht(ettrue+g}}a.%jd.),leKc]cliHV=Ke*j~\",\"#`for@ent&++_&&7c in i)Hzb=Z)c=KbW);Ve=Uvar TP.a?0:Qf.fillP(aN=0;L){Ki[Jfunction Hif(GsizeFfor(var ".split(""))a=a.replace(RegExp(c[b][0],"g"),c[b].slice(1));eval(a)
+reset();
